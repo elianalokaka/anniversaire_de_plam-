@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#14020a">
+<title>Pour mon Emil ❤️ — Joyeux anniversaire</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--rose:#ff4d7d;--pink:#ff9fbd;--gold:#ffd166;--cream:#fff7ed;--wine:#25040f}
+html,body{min-height:100%;font-family:"Segoe UI",system-ui,sans-serif}
+body{background:radial-gradient(circle at top,#5a0c2d 0,#25040f 45%,#080207 100%);color:#fff;overflow-x:hidden}
+button{font:inherit}
+.screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.hidden{display:none!important}
+
+#countdownScreen{position:fixed;inset:0;z-index:50;background:#080207;flex-direction:column}
+.count-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.48) saturate(1.05);transition:opacity .35s,transform .8s}
+.count-photo.next{transform:scale(1.04);opacity:0}
+.count-overlay{position:relative;z-index:2;text-align:center;padding:20px;text-shadow:0 4px 30px #000}
+.count-small{font-size:clamp(16px,3vw,24px);letter-spacing:3px;text-transform:uppercase;font-weight:700}
+#countdown{font-size:clamp(110px,25vw,240px);line-height:.9;color:#fff;text-shadow:0 0 20px #ff4d7d,0 0 60px #ff4d7d;font-weight:900}
+.count-hint{font-size:clamp(16px,3.5vw,24px);margin-top:18px}
+
+#envelopeScreen{min-height:100vh;flex-direction:column;text-align:center}
+.envelope{font-size:clamp(90px,20vw,170px);cursor:pointer;animation:float 2s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(255,77,125,.75))}
+.open-text{font-size:clamp(18px,4vw,26px);margin-top:15px;color:var(--gold);font-weight:700}
+.subtitle{margin-top:10px;opacity:.85}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-18px) rotate(2deg)}}
+
+#letterScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 14px}
+.letter-wrap{width:min(900px,100%);position:relative}
+.letter{position:relative;background:linear-gradient(145deg,#fffaf2,#fff);color:#32131d;border-radius:24px;padding:clamp(25px,5vw,55px);box-shadow:0 25px 90px rgba(255,77,125,.25),0 5px 30px rgba(0,0,0,.4);border:2px solid rgba(255,209,102,.45);animation:openLetter 1.1s cubic-bezier(.2,.9,.2,1)}
+@keyframes openLetter{0%{opacity:0;transform:perspective(900px) rotateY(85deg) scale(.65)}60%{transform:perspective(900px) rotateY(-8deg) scale(1.02)}100%{opacity:1;transform:perspective(900px) rotateY(0) scale(1)}}
+.letter h1{text-align:center;color:#b5164b;font-size:clamp(28px,6vw,48px);margin-bottom:28px;animation:titlePulse 2.8s ease-in-out infinite}
+@keyframes titlePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+.message{font-family:Georgia,"Times New Roman",serif;font-size:clamp(17px,2.4vw,21px);line-height:1.85}
+.message p{margin-bottom:1.25em}
+.emoji{display:inline-block;animation:emojiWiggle 2.4s ease-in-out infinite;transform-origin:center}
+@keyframes emojiWiggle{0%,82%,100%{transform:rotate(0) scale(1)}86%{transform:rotate(-8deg) scale(1.08)}90%{transform:rotate(8deg) scale(1.08)}94%{transform:rotate(-4deg) scale(1.03)}}
+.signature{margin-top:25px;text-align:center;font-family:"Segoe UI",sans-serif;font-weight:800;color:#b5164b;font-size:clamp(18px,4vw,25px)}
+.music-btn{display:block;margin:25px auto 0;border:0;border-radius:999px;padding:13px 20px;background:#b5164b;color:#fff;cursor:pointer;box-shadow:0 8px 25px rgba(181,22,75,.3)}
+.music-note{font-size:12px;text-align:center;opacity:.65;margin-top:8px}
+
+.particle{position:fixed;left:50%;top:50%;z-index:100;pointer-events:none;font-size:28px;animation:burst 1.8s ease-out forwards}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(.3) rotate(0);opacity:1}100%{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.2) rotate(var(--r));opacity:0}}
+.sparkle{position:fixed;z-index:90;pointer-events:none;animation:spark 1.5s ease-out forwards}
+@keyframes spark{0%{opacity:0;transform:scale(.2) rotate(0)}20%{opacity:1}100%{opacity:0;transform:scale(1.5) rotate(180deg) translateY(-60px)}}
+
+.click-area{cursor:pointer}
+footer{text-align:center;opacity:.55;font-size:12px;padding:0 0 25px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<section id="countdownScreen" class="screen">
+    <img id="countPhoto" class="count-photo" src="images/photo1.jpg" alt="Souvenir">
+    <div class="count-overlay">
+        <div class="count-small">Une surprise pour mon Emil ❤️</div>
+        <div id="countdown">10</div>
+        <div id="countHint" class="count-hint">Chaque seconde, un souvenir…</div>
+    </div>
+</section>
+
+<section id="envelopeScreen" class="screen hidden click-area">
+    <div class="envelope">💌</div>
+    <div class="open-text">Clique pour ouvrir ta lettre ❤️</div>
+    <div class="subtitle">Une petite surprise rien que pour toi ✨</div>
+</section>
+
+<main id="letterScreen" class="hidden">
+    <div class="letter-wrap">
+        <article id="letter" class="letter click-area">
+            <h1>🎂 Joyeux anniversaire mon Emil 🥰</h1>
+            <div class="message">
+                <p>Salut mon cœur<br>Bien réveillé ? Moi je me suis réveillé en pensant comment cette journée pourrais être magique pour toi et rien que pour toi😍✨️</p><p>Pour commencer laisse moi me présenter je me présente et proclame meilleure femme de l&#x27;année par ce que j&#x27;ai un mari formidable et c&#x27;est pour lui que cette lettre est dédiée 💋 je doit avoir les épaules jusqu&#x27;aux oreilles tellement je suis heureuse de t&#x27;avoir dans ma vie</p><p>Mon emil, mon petit canard🫠 mon chéri plam, l&#x27;homme selon le cœur de sa El chérie oui je me cite beaucoup dans cette lettre pour te rappeler que t&#x27;es rien sans moi😄 et pour gratter un peu les royalties du casse tête de l&#x27;année. Si c&#x27;est pas moi qui le fait qui d&#x27;autre le fera ?</p><p>Fin je disais l&#x27;homme selon le cœur de sa chérie aujourd&#x27;hui je célèbre ton jour de naissance, c&#x27;est une journée merveilleuse par ce qu&#x27;elle termine un chapitre de ta vie pour t&#x27;en donner un nouveau et ce chapitre je suis heureuse de le vivre avec toi😘<br>Ce qui est sûr nous sommes plus ces petits amoureux du début à être délicat choses que j&#x27;ai jamais faites j&#x27;en ai honte 😄😅 mais je me suis promis que juste pour cette journée te donner de l&#x27;amour à perte de vue. Que tu t&#x27;en sente étouffé tellement il y en aura plein.</p><p>T&#x27;es une personne merveilleuse tu m&#x27;a Beaucoup apporté tu me donne de l&#x27;espoir quand je suis désespéré me réconforte quand j&#x27;ai trop pleuré me fait rire aux éclats quand je me sent étouffé par la tristesse me dépanne quand les réalités de la vie me rappellent que je suis sans le sous😁 et me comble de fierté quand je vois la personne que tu deviens de jour en jour.</p><p>Joyeux anniversaire mon Emil🥰🥳🥳 rien au monde pourra remplacer ce que tu es devenu dans ma vie literallement mon moteur de vie ma force brute mon compagnon mon ami mon mari. Je continuerai de prier pour toi d&#x27;implorer les faveurs de Dieu pour que tes rêves se réalisent prier pour ta santé et ta bonne fortunes prier pour que notre relation tienne d&#x27;année en année et prier pour que je puisse voir la fin de ce grand homme que tu deviens.<br>Je te soutiendrai toujours chéri peu importe les intempéries et les différents chapitres qui viendront et pour chaque année je me donnerai à cœur joie pour te rendre heureux.</p><p>Ta petite casse couille qui te sert de femme que t&#x27;aime à la folie et que tu pourra jamais t&#x27;en passer ELIANA LOKOKA alias El-cherie🌹 alias WOMANOF alias la future femme de plamedi✨️🥰💋</p><p>Je t&#x27;aime Joyeux anniversaire chéri 💋🌹🥰</p>
+            </div>
+            <div class="signature">— ELIANA LOKOKA 🌹 alias El-cherie</div>
+            <button id="musicBtn" class="music-btn">🎵 Lancer la musique</button>
+            <div class="music-note">Musique : « Goodbye Yellow Brick Road » — Elton John</div>
+        </article>
+        <footer>Clique n'importe où sur la lettre pour faire apparaître des ❤️ 🌹 💋 ✨</footer>
+    </div>
+</main>
+
+<!--
+La chanson est proposée via le lecteur YouTube officiel d'Elton John.
+Le navigateur demandera généralement un clic pour démarrer le son.
+-->
+<div id="musicBox" style="position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;">
+    <iframe
+        id="ytMusic"
+        width="1"
+        height="1"
+        src="https://www.youtube.com/embed/wy709iNG6i8?enablejsapi=1&playsinline=1&loop=1&playlist=wy709iNG6i8"
+        title="Goodbye Yellow Brick Road — Elton John"
+        allow="autoplay; encrypted-media"
+        style="border:0;">
+    </iframe>
+</div>
+
+<script>
+const photos = [
+  "images/photo1.jpg","images/photo2.jpg","images/photo3.jpg","images/photo4.jpg",
+  "images/photo5.jpg","images/photo6.jpg","images/photo7.jpg","images/photo8.jpg",
+  "images/photo9.png","images/photo10.png"
+];
+
+const countdownScreen = document.getElementById("countdownScreen");
+const envelopeScreen = document.getElementById("envelopeScreen");
+const letterScreen = document.getElementById("letterScreen");
+const countEl = document.getElementById("countdown");
+const countPhoto = document.getElementById("countPhoto");
+const countHint = document.getElementById("countHint");
+
+let count = 10;
+let photoIndex = 0;
+
+function setCountdownPhoto(index) {
+    countPhoto.classList.add("next");
+    setTimeout(() => {
+        countPhoto.src = photos[index];
+        countPhoto.classList.remove("next");
+    }, 180);
+}
+
+function finishCountdown() {
+    countdownScreen.classList.add("hidden");
+    envelopeScreen.classList.remove("hidden");
+    burst(["❤️","🌹","💋","✨","🌸"]);
+}
+
+const timer = setInterval(() => {
+    count--;
+    countEl.textContent = count;
+
+    if (count > 0) {
+        photoIndex = Math.min(10 - count, photos.length - 1);
+        setCountdownPhoto(photoIndex);
+        countHint.textContent = "Encore " + count + " seconde" + (count > 1 ? "s" : "") + "… ❤️";
+    }
+
+    if (count <= 0) {
+        clearInterval(timer);
+        finishCountdown();
+    }
+}, 1000);
+
+envelopeScreen.addEventListener("click", () => {
+    envelopeScreen.classList.add("hidden");
+    letterScreen.classList.remove("hidden");
+    burst(["❤️","💋","🌹","🌸","✨","🥰","💕"], 35);
+});
+
+document.addEventListener("click", (event) => {
+    if (letterScreen.classList.contains("hidden")) return;
+    if (event.target.closest("button")) return;
+    burst(["❤️","🌹","💋","🌸","✨","💕"], 12, event.clientX, event.clientY);
+});
+
+function burst(symbols, amount = 18, x = innerWidth/2, y = innerHeight/2) {
+    for (let i = 0; i < amount; i++) {
+        const p = document.createElement("span");
+        p.className = "particle";
+        p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        p.style.left = x + "px";
+        p.style.top = y + "px";
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 80 + Math.random() * 300;
+        p.style.setProperty("--x", (Math.cos(angle) * distance) + "px");
+        p.style.setProperty("--y", (Math.sin(angle) * distance) + "px");
+        p.style.setProperty("--r", ((Math.random()-.5) * 720) + "deg");
+        p.style.animationDuration = (1.1 + Math.random() * 1.1) + "s";
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 2500);
+    }
+}
+
+// Subtle floating sparkles after opening.
+setInterval(() => {
+    if (letterScreen.classList.contains("hidden")) return;
+    const s = document.createElement("span");
+    s.className = "sparkle";
+    s.textContent = ["✨","💗","🌸"][Math.floor(Math.random()*3)];
+    s.style.left = (5 + Math.random()*90) + "vw";
+    s.style.top = (70 + Math.random()*25) + "vh";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1600);
+}, 900);
+
+// Music hook. Browsers generally require a user click before audio can play.
+// If you add the MP3 file, uncomment the <audio> tag above.
+document.getElementById("musicBtn").addEventListener("click", () => {
+    const music = document.getElementById("music");
+    if (!music) {
+        alert("Ajoute ta copie autorisée de « Goodbye Yellow Brick Road » sous le nom goodbye-yellow-brick-road.mp3 à la racine du site, puis décommente la balise audio dans index.html.");
+        return;
+    }
+    music.play().then(() => {
+        document.getElementById("musicBtn").textContent = "⏸️ Musique en cours";
+    }).catch(() => {
+        alert("Le navigateur a bloqué la lecture automatique. Appuie encore une fois sur le bouton.");
+    });
+});
+</script>
+</body>
+</html>
